@@ -1,0 +1,9 @@
+# Byte-compiled / optimized Python files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Visual Studio Code
+.vscode/
+.DS_Store
+
