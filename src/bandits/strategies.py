@@ -68,6 +68,30 @@ class EpsilonGreedy(Strategy):
         return f'EpsilonGreedy(e={self.epsilon})'
     
 
+class UCB1(Strategy):
+    
+    def __init__(self, arms:List[Arm], c:Union[int,float]=1.0):
+        """
+        Initializes the UCB1 strategy.
+
+        Args:
+            arms (List[Arm]): The list of arms available.
+            c (Union[int,float]): The exploration parameter
+        """
+        super().__init__(arms=arms)
+        self.t:int = 0 
+        self.c:Union(int,float) = c
+        
+    def __str__(self) -> str:
+        return f'UCB1(c={self.c})'
+    
+    def select_arm(self) -> int:
+        
+        seleceted = np.argmax([arm.cumulative_reward + ( (self.c * np.sqrt(np.log(self.t)) / (arm.pull_counts + 1e-8)) )
+                               for arm in self.arms])     
+        self.t += 1
+        return seleceted
+    
 class PureExploration(Strategy):
     
     """

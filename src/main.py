@@ -1,7 +1,7 @@
 from typing import List
 from bandits.bandit_metrics import BanditMetrics
 from bandits.helpers.plotter import plot_strategies
-from bandits.strategies import EpsilonGreedy, PureExploration, PureExploitation, Strategy
+from bandits.strategies import UCB1, EpsilonGreedy, PureExploration, PureExploitation, Strategy
 from examples.slot_machine import SlotMachineBandit, SlotMachine
 import matplotlib.pyplot as plt
 import copy
@@ -22,7 +22,8 @@ if __name__ == "__main__":
     strategies = [
         PureExploitation(arms=copy.deepcopy(slot_machines)),
         PureExploration(arms=copy.deepcopy(slot_machines)),
-        EpsilonGreedy(arms=copy.deepcopy(slot_machines), epsilon=EXPLORATION_RATIO)
+        EpsilonGreedy(arms=copy.deepcopy(slot_machines), epsilon=EXPLORATION_RATIO),
+        UCB1(arms=copy.deepcopy(slot_machines), c=1.5)
     ]
     
     plot_strategies(bandit_class=SlotMachineBandit,
