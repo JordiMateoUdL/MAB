@@ -1,7 +1,7 @@
 import numpy as np
 from domain.arm import Arm
 from bandits.bandit import Bandit
-from bandits.strategies import Strategy
+from bandits.strategies import Strategy, ThomsonSampling
 
 class SlotMachine(Arm):
     def __init__(self, true_reward):
@@ -26,6 +26,11 @@ class SlotMachineBandit(Bandit):
         selected_arm = self.strategy.select_arm()
         reward = self.strategy.arms[selected_arm].pull()
         self.strategy.arms[selected_arm].update_reward(reward)
+        
+        if isinstance(self.strategy, ThomsonSampling):
+            self.strategy.update(reward, selected_arm)
+
+            
         return selected_arm
         
     def run(self, num_rounds):

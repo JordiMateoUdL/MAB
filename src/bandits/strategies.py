@@ -91,6 +91,35 @@ class UCB1(Strategy):
                                for arm in self.arms])     
         self.t += 1
         return seleceted
+
+class ThomsonSampling(Strategy):
+    
+    def __init__(self, arms:List[Arm], threshold:Union[int,float]=0.5):
+        """
+        Initializes the UCB1 strategy.
+
+        Args:
+            arms (List[Arm]): The list of arms available.
+        """
+        super().__init__(arms=arms)
+        self.successes:List[int] = [1]*len(arms)
+        self.failures:List[int] = [1]*len(arms)
+        self.threshold:Union[int,float] = threshold
+ 
+        
+    def __str__(self) -> str:
+        return f'ThomsonSampling (threshold={self.threshold})'
+    
+    def select_arm(self) -> int:      
+        seleceted = np.argmax([np.random.beta(self.successes[arm], self.failures[arm]) for arm in range(len(self.arms))])
+    
+        return seleceted
+    
+    def update(self, reward:float, arm:int):
+        if reward > self.threshold:
+            self.successes[arm] += 1
+        else:
+            self.failures[arm] += 1
     
 class PureExploration(Strategy):
     
