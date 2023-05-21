@@ -86,11 +86,11 @@ class UCB1(Strategy):
         return f'UCB1(c={self.c})'
     
     def select_arm(self) -> int:
-        
-        seleceted = np.argmax([arm.cumulative_reward + ( (self.c * np.sqrt(np.log(self.t)) / (arm.pull_counts + 1e-8)) )
-                               for arm in self.arms])     
+                
+        selected = np.argmax([arm.cumulative_reward + (self.c * np.sqrt(np.log(self.t) / (arm.pull_counts + 1e-8))) if arm.pull_counts > 0 else float('inf') for arm in self.arms])
+
         self.t += 1
-        return seleceted
+        return selected
 
 class ThomsonSampling(Strategy):
     
