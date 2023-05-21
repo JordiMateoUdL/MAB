@@ -49,8 +49,18 @@ where $R(a^*)$ represents the reward obtained by choosing the optimal action at 
 
 The **epsilon-greedy algorithm** is a simple and widely used approach in solving the multi-armed bandit problem. It strikes a balance between exploration and exploitation by selecting the best-known action most of the time (exploitation) while occasionally exploring others (exploration).
 
+The following pseudocode descrives the mian logic:
 ![](./docs/epsilon-greedy.png)
 
+Considerations:
+
+* $P(\cdot)$ can be any probability distribution, including discrete and continuous distributions such as: **Bernoulli, Normal, Uniform, Exponential or Custom**. 
+
+* $\hat{R}(a_t|r_t )$ the rule to update the reward is problem dependent, and you need to decide which is the best for your goal.
+
+For instance, in the traditional application of MABs with slot machines. We can use $P(\cdot)$ as a uniform distribution and $\hat{R}(a_t|r_t )$ as $\frac{R(a_t) \cdot (N(a_t) - 1) + r_t}{N(a_t)}$.
+
+![](./docs/epsilon-greedy_slot_machine.png)
 
 
 
