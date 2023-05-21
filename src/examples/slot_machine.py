@@ -3,13 +3,13 @@ from domain.arm import Arm
 from bandits.bandit import Bandit
 from bandits.strategies import Strategy
 
-
 class SlotMachine(Arm):
     def __init__(self, true_reward):
         super().__init__()
         self.true_reward = true_reward
 
     def pull(self):
+        # Based on uniform distribution
         reward = np.random.uniform(self.true_reward, 1)
         return reward
     
