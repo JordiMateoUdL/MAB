@@ -2,9 +2,9 @@ from typing import List
 
 from matplotlib import pyplot as plt
 import numpy as np
-from bandits.bandit import Bandit
-from bandits.bandit_metrics import BanditMetrics
-from bandits.strategies import Strategy
+from domain.bandit import Bandit
+from mab.bandit_metrics import BanditMetrics
+from mab.domain.algorithms.strategies import Strategy
 
 
 def plot_strategies(bandit_class: Bandit, strategies: List[Strategy], 

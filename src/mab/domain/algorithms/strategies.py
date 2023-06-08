@@ -3,10 +3,9 @@ from abc import ABC, abstractmethod
 from typing import List, Union
 import numpy as np
 
-from domain.arm import Arm
+from mab.domain.arm import Arm
 
-
-class Strategy(ABC):
+class Algorithm(ABC):
 
     """
     Abstract base class representing a strategy for selecting 
@@ -31,10 +30,12 @@ class Strategy(ABC):
         """
 
         raise NotImplementedError("select_arm method must be implemented...")
-    
 
 
-class EpsilonGreedy(Strategy):
+
+
+
+class EpsilonGreedy(Algorithm):
 
     """
     Epsilon-Greedy strategy for selecting an arm
@@ -74,7 +75,7 @@ class EpsilonGreedy(Strategy):
         return f'EpsilonGreedy(e={self.epsilon})'
 
 
-class UCB1(Strategy):
+class UCB1(Algorithm):
     """UCB1 (Upper Confidence Bound 1) strategy for selecting an arm"""
 
     def __init__(self, arms: List[Arm], c: Union[int, float] = 1.0, threshold: float = 1e-8):
@@ -117,7 +118,7 @@ class UCB1(Strategy):
         return selected
 
 
-class ThomsonSampling(Strategy):
+class ThomsonSampling(Algorithm):
     """
     Thompson Sampling strategy for the multi-armed bandit problem.
     """
@@ -167,7 +168,7 @@ class ThomsonSampling(Strategy):
             self.failures[arm] += 1
 
 
-class PureExploration(Strategy):
+class PureExploration(Algorithm):
 
     """
     Pure exploration strategy for selecting an arm. Always selects a random arm.
@@ -200,7 +201,7 @@ class PureExploration(Strategy):
         return "PureExploration"
 
 
-class PureExploitation(Strategy):
+class PureExploitation(Algorithm):
     """
     Pure exploitation strategy for selecting an arm. Always selects the arm with the highest cumulative reward.
     """

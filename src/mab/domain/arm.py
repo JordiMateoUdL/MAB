@@ -5,27 +5,11 @@
     This module defines the abstract base class `Arm` that serves as a blueprint for implementing
     different arms in a multi-armed bandit problem. Each arm represents a possible action or choice
     that can be taken, and the goal is to find the arm that maximizes the cumulative reward.
-
-    Subclasses of `Arm` must implement the abstract methods `pull` and `update_reward` according to
-    their specific implementation details.
-
-    Example usage:
-        class MyArm(Arm):
-            def pull(self):
-                # Implement the logic to pull the arm and obtain the reward
-
-            def update_reward(self, reward):
-                # Implement the logic to update the reward estimate based on the obtained reward
-
-        my_arm = MyArm()
-        reward = my_arm.pull()
-        my_arm.update_reward(reward)
-        regret = my_arm.get_regret(best_reward)
-        arm.reset()
 """
 
 from abc import ABC, abstractmethod
 from typing import Union
+
 
 class Arm(ABC):
     """
@@ -38,8 +22,12 @@ class Arm(ABC):
 
         Initializes the pull_counts and cumulative_reward variables.
         """
-        self.pull_counts:int = 0 
-        self.cumulative_reward:Union[int, float] = 0 #cumulative reward obtained from pulling the arm
+        # number of times the arm has been pulled
+        self._pull_counts: int = 0
+        # cumulative reward obtained from pulling the arm
+        self._cumulative_reward: Union[int, float] = 0
+        self._cumulative_regret: Union[int, float] = 0
+        
 
     @abstractmethod
     def pull(self) -> Union[int, float]:
@@ -63,7 +51,18 @@ class Arm(ABC):
 
         Subclasses must implement this method with their specific implementation details.
         """
-        raise NotImplementedError("update_reward method must be implemented...")
+        raise NotImplementedError(
+            "update_reward method must be implemented...")
+        
+    # @abstractmethod
+    # def get_reward(self) -> Union[int, float]:
+    #     """
+    #     Abstract method for getting the arm's reward estimate.
+
+    #     Subclasses must implement this method with their specific implementation details.
+    #     """
+    #     raise NotImplementedError(
+    #         "get_reward method must be implemented...")
 
     def reset(self) -> None:
         """
@@ -71,24 +70,25 @@ class Arm(ABC):
 
         Resets the pull_counts and cumulative_reward attributes to their initial values.
         """
-        self.pull_counts = 0
-        self.cumulative_reward = 0
-    
-    def get_average_regret(self, best_reward: Union[int, float]) -> Union[int, float]:
-        """
-        Calculates the average regret over time for the arm.
+        self._pull_counts = 0
+        self._cumulative_reward = 0
+        self._cumulative_regret = 0
 
-        Args:
-            best_reward: The best possible reward achievable obtained from any of the arms in the bandit.
+    def get_pull_counts(self) -> int:
+        """
+        Returns the number of times the arm has been pulled.
 
         Returns:
-            The regret of the arm, which is the difference between the best_reward 
-            and the cumulative reward for this arm.
-
-        Raises:
-            ValueError: If the best_reward is negative.
+            The number of times the arm has been pulled.
         """
-        if best_reward < 0:
-            raise ValueError("The best_reward cannot be negative.")
+        return self._pull_counts
 
-        return best_reward - self.cumulative_reward
+    def get_cumulative_reward(self) -> Union[int, float]:
+        """
+        Returns the cumulative reward obtained from pulling the arm.
+
+        Returns:
+            The cumulative reward obtained from pulling the arm.
+        """
+        return self._cumulative_reward
+    
