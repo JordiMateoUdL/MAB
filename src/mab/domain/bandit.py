@@ -1,65 +1,58 @@
-
-from typing import List, Union
+'''
+Module: bandit.py
+Base class representing a multi-armed bandit problem.
+'''
+from typing import List
 from mab.domain.arm import Arm
 
-class Bandit():
+class Bandit:
+    """
+    Class representing a multi-armed bandit problem.
 
-    def __init__(self, arms: List[Arm]) -> None:
+    This class represents a bandit consisting of a set of arms, each representing a possible action
+    or choice that can be taken, and the goal is to find the arm that maximizes the cumulative reward.
+    """
+
+    def __init__(self, arms: List[Arm] = None) -> None:
         """
         Initializes the bandit object.
 
-        Args:
-            arms: A list of Arm objects representing the arms in the bandit.
+        Initializes the arms variable with the provided list of arms.
+        If no list is provided, it initializes it as an empty list.
         """
-        self._arms = arms
-        self._cumulative_reward: Union[int, float] = 0
-        self._cumulative_regret: Union[int, float] = 0
+        self._arms: List[Arm] = arms or []
 
-
-    def update(self, arm: Arm, reward: float) -> None:
-        """
-        Updates the bandit's internal state after pulling an arm and receiving a reward.
-
-        Args:
-            arm: The Arm object that was pulled.
-            reward: The reward obtained from pulling the arm.
-        """
-        # Update the arm's internal state
-        arm.update_reward(reward)
-        
-        # Update bandit's internal state
-        self.update_cumulative_reward(reward)
-        #regret = self.get_regret(reward)
-        #self.update_cumulative_regret(regret)
-
-    def reset(self) -> None:
-        """
-        Resets the bandit's state.
-
-        Resets the state of all arms in the bandit.
-        """
-        for arm in self._arms:
-            arm.reset()
-        self._cumulative_reward = 0
-        self._cumulative_regret = 0
-              
     def get_arms(self) -> List[Arm]:
         """
-        Returns the list of arms in the bandit.
-
         Returns:
-            A list of Arm objects.
+            A list of arms representing the possible actions or choices.
         """
         return self._arms
-    
-    def get_total_arms(self) -> int:
-        """
-        Returns the total number of arms in the bandit.
 
-        Returns:
-            The total number of arms in the bandit.
+    def add_arm(self, arm: Arm) -> None:
         """
-        return len(self._arms)
+        Adds an arm to the bandit.
+
+        Args:
+            arm: The arm to be added to the bandit.
+        """
+        self._arms.append(arm)
+
+    def remove_arm(self, arm: Arm) -> None:
+        """
+        Removes an arm from the bandit.
+
+        Args:
+            arm: The arm to be removed from the bandit.
+        """
+        self._arms.remove(arm)
+        
+    def get_arm(self, index: int) -> Arm:
+        """
+        Returns the arm at the specified index.
+        Args: The index of the arm to be returned.
+        """
+        return self._arms[index]
     
     def get_arm_index(self, arm:Arm) -> int:
         """
@@ -70,63 +63,58 @@ class Bandit():
         """
         return self._arms.index(arm)
 
-    def get_best_reward(self) -> float:
+    def get_arms_number(self) -> int:
         """
-        Returns the best possible reward in the bandit.
+        Returns the total number of arms in the bandit.
 
         Returns:
-            The best possible reward in the bandit.
+            The total number of arms in the bandit.
         """
-        return max([arm.get_reward() for arm in self._arms])
-    
-    def get_regret(self, reward: float) -> float:
-        """
-        Calculates the regret of the bandit.
+        return len(self._arms)
 
-        Args:
-            reward: The reward obtained from pulling the arm.
+    def calculate_cumulative_reward(self) -> float:
+        """
+        Calculates the cumulative reward of the bandit.
 
         Returns:
-            The regret of the bandit.
+            The cumulative reward obtained from all the arms in the bandit.
         """
-        return self.get_best_reward() - reward
-    
-    def update_cumulative_reward(self, reward: float) -> None:
+        return sum(arm.get_cumulative_reward() for arm in self._arms)
+
+    def reset(self) -> None:
         """
-        Updates the cumulative reward of the bandit.
+        Resets the bandit's state.
+
+        Resets the state of all arms in the bandit.
+        """
+        for arm in self._arms:
+            arm.reset()
+            
+    def pull_arm(self, arm: Arm) -> float:
+        """
+        Pulls an arm from the bandit.
 
         Args:
-            reward: The reward obtained from pulling the arm.
+            arm: The arm to be pulled.
+
+        Returns:
+            The reward obtained from pulling the arm.
         """
-        self._cumulative_reward += reward
         
-    def update_cumulative_regret(self, regret: float) -> None:
-        """
-        Updates the cumulative regret of the bandit.
+        if arm in self._arms:
+            reward = arm.pull()
+            arm.update_cumulative_reward(reward)
+            return reward
+        else:
+            raise ValueError("The arm is not in the bandit.")
 
-        Args:
-            regret: The regret of the bandit.
+    def __clone__(self):
         """
-        self._cumulative_regret += regret  
-        
-    def get_cumulative_reward(self) -> float:
-        """
-        Returns the cumulative reward of the bandit.
+        Creates a new instance of the bandit with the same arms.
 
         Returns:
-            The cumulative reward of the bandit.
+            A new instance of the bandit with the same arms.
         """
-        return self._cumulative_reward
-    
-    def get_cumulative_regret(self) -> float:
-        """
-        Returns the cumulative regret of the bandit.
-
-        Returns:
-            The cumulative regret of the bandit.
-        """
-        return self._cumulative_regret  
-    
-
-
-    
+        cloned_bandit = self.__class__()
+        cloned_bandit._arms = [arm.__clone__() for arm in self._arms]
+        return cloned_bandit

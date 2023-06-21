@@ -1,7 +1,7 @@
 import copy
 
 from examples.slot_machine import SlotMachine
-from mab.domain.bandit import Bandit
+from mab.domain.bandit_Old import Bandit
 from mab.simulator.benchmark_report import BenchmarkReporter
 from mab.simulator.simulation import SimulationController
 from mab.simulator.simulation_report import SimulationReporter

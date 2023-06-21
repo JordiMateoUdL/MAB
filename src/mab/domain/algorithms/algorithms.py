@@ -1,6 +1,6 @@
 from typing import List
 import random
-from mab.domain.bandit import Bandit
+from mab.domain.bandit_Old import Bandit
 from mab.domain.arm import Arm
 
 

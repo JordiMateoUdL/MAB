@@ -9,7 +9,7 @@ from typing import Optional
 from abc import ABC, abstractmethod
 from mab.domain.arm import Arm
 
-from mab.domain.bandit import Bandit
+from mab.domain.bandit_Old import Bandit
 
 class SolverAction(Enum):
     '''

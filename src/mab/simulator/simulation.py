@@ -1,6 +1,6 @@
 """Simulation"""
 
-from mab.domain.bandit import Bandit
+from mab.domain.bandit_Old import Bandit
 from mab.simulator.simulation_results import SimulationResults
 from mab.solvers.solvers import BanditAction, BanditSolver
 
