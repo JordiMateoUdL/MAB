@@ -2,8 +2,9 @@
 Test cases for the Bandit class.
 """
 import unittest
-from arm_test import MOCK_REWARD, PULLS, MockArm
 from mab.domain.bandit import Bandit
+from tests.domain.arm_test import MockArm, PULLS, MOCK_REWARD
+
 
 
 class BanditTestCase(unittest.TestCase):
