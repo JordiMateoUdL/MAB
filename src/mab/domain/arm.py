@@ -44,7 +44,6 @@ class Arm(ABC):
             The reward obtained from pulling the arm.
         """
         self._pull_counts += 1
-        return None
 
     @abstractmethod
     def update_cumulative_reward(self, reward: Union[int, float]) -> None:
@@ -87,7 +86,26 @@ class Arm(ABC):
             The cumulative reward obtained from pulling the arm.
         """
         return self._cumulative_reward
-    
+
+    def set_pull_counts(self, pull_counts: int) -> None:
+        """
+        Sets the number of times the arm has been pulled.
+
+        Args:
+            pull_counts (int): The number of times the arm has been pulled.
+        """
+        self._pull_counts = pull_counts
+
+    def set_cumulative_reward(self, cumulative_reward: Union[int, float]) -> None:
+        """
+        Sets the cumulative reward obtained from pulling the arm.
+
+        Args:
+            cumulative_reward (Union[int, float]): 
+                The cumulative reward obtained from pulling the arm.
+        """
+        self._cumulative_reward = cumulative_reward
+
     def __clone__(self) -> 'Arm':
         """
         Creates a new instance of the Arm class with the same attribute values.
@@ -96,6 +114,6 @@ class Arm(ABC):
             A new instance of the Arm class with the same attribute values.
         """
         cloned_arm = self.__class__()
-        cloned_arm._pull_counts = self._pull_counts
-        cloned_arm._cumulative_reward = self._cumulative_reward
+        cloned_arm.set_pull_counts(self._pull_counts)
+        cloned_arm.set_cumulative_reward(self._cumulative_reward)
         return cloned_arm
