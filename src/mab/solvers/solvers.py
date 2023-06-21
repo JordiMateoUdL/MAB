@@ -1,26 +1,45 @@
+'''
+This module defines the abstract base class `Solver` that serves as a blueprint 
+for implementing different solvers for Bandit problems.
+'''
 
 import random
 from enum import Enum
+from typing import Optional
 from abc import ABC, abstractmethod
 from mab.domain.arm import Arm
 
 from mab.domain.bandit import Bandit
 
-class BanditAction(Enum):
-    EXPLORATION = "Exploration"
-    EXPLOITATION = "Exploitation"
+class SolverAction(Enum):
+    '''
+    This enum represents the different actions that a solver can take.
+    '''
+    EXPLORE = "Explore"
+    EXPLOIT = "Exploit"
     
-
-class BanditSolver(ABC):
-    def __init__(self, bandit: Bandit):
+class Solver(ABC):
+    '''
+    Abstract base class representing a solver for a multi-armed bandit problem.
+    '''
+    def __init__(self, bandit: Optional[Bandit] = None) -> None:
         self._bandit = bandit
+        self.rewards = {}
+        self.counts = {}
         self._action = None
 
     @abstractmethod
     def select_arm(self) -> Arm:
-        pass
-    
+        '''
+        This is an abstract method that must be implemented by subclasses.
+        The aim of this method is to select an arm from the bandit.
+        '''
+        
+        raise NotImplementedError("select_arm method must be implemented...")
+   
+
     def get_bandit(self) -> Bandit:
+        
         return self._bandit
     
     def update_bandit(self, arm: Arm, reward: float) -> None:
