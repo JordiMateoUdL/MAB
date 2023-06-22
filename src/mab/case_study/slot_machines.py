@@ -49,18 +49,23 @@ def bernoulli_slot_machines():
             print(f' ++ Arm {arm}: {results.usage_fractions[arm] * 100:.2f}%')
 
     benchmark_results = simulator.get_results()
-    arm_fractions = {}
+    
 
     # Obtain the fraction of times each arm was selected for each solver
     # @TODO: Migrate to Reporter class
+    arm_fractions = {}
+    rewards = {}
     for solver in solvers:
         arm_fractions[str(
             solver)] = benchmark_results[solver].usage_fractions.values()
-
+        rewards[str(
+            solver)] = benchmark_results[solver].rewards
+    
     # Plot the results
-    plotter = Plotter()
     # Plot the fraction of times each arm was selected for each solver
-    plotter.plot_arm_selection_fractions(arm_fractions, solvers_names)
-    plotter.show_plot()
+    Plotter.plot_arm_selection_fractions(arm_fractions, solvers_names)
+    Plotter.show_plot()
+    
+    Plotter.plot_cumulative(rewards)
+    Plotter.show_plot()
 
-    # plotter.plot_arm_selection_fractions()
