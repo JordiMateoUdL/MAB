@@ -18,7 +18,7 @@ You can install the MAB Simulator package using [Poetry](https://python-poetry.o
 git clone https://github.com/JordiMateoUdL/MAB.git
 
 # Navigate to the project directory
-cd mab-simulator
+cd mab
 
 # Install the dependencies
 poetry install
