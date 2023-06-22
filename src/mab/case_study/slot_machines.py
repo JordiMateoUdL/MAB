@@ -5,6 +5,7 @@ from mab.domain.bandit import Bandit
 from mab.simulator.plotter import PlotConfig, Plotter
 from mab.simulator.simulator import Simulator
 from mab.solvers.epsilon_greedy import EpsilonGreedySolver
+from mab.solvers.thomson_sampling import ThomsonSamplingSolver
 from mab.solvers.ucb import UCB1Solver
 
 
@@ -30,7 +31,8 @@ def bernoulli_slot_machines():
     # Solver configuration
     epsilon_greedy_solver = EpsilonGreedySolver(bandit, epsilon=0.01)
     ucb1_solver = UCB1Solver(bandit, exploration_parameter=1.0)
-    solvers = [epsilon_greedy_solver, ucb1_solver]
+    thomson_sampling_solver = ThomsonSamplingSolver(bandit)
+    solvers = [epsilon_greedy_solver, ucb1_solver, thomson_sampling_solver]
 
     # Create the simulator instance
     simulator = Simulator(bandit, solvers)

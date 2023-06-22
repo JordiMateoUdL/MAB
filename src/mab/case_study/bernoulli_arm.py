@@ -1,5 +1,6 @@
 """Module for the BernoulliArm class."""
 import random
+from typing import Union
 from mab.domain.arm import Arm
 
 
@@ -13,7 +14,7 @@ class BernoulliArm(Arm):
         if success_probability is None:
             self.success_probability = random.random()
 
-    def pull(self) -> int | float:
+    def pull(self) -> Union[int, float]:
         """Pull the arm based on the success probability and return the reward."""
         super().pull()
 
@@ -22,12 +23,11 @@ class BernoulliArm(Arm):
 
         return 0
 
-    def update_cumulative_reward(self, reward: int | float) -> None:
+    def update_cumulative_reward(self, reward: Union[int, float]) -> None:
         """ We update the cumulative reward of the arm based on the pull count 
         and the reward obtained from pulling the arm."""
-        #self._cumulative_reward = (self._cumulative_reward * (self._pull_counts - 1)
-        #                           + reward) / self._pull_counts
-        self._cumulative_reward += 1/(self._pull_counts+1) * (reward - self._cumulative_reward)
+        self._cumulative_reward = (self._cumulative_reward * (self._pull_counts - 1)
+                                   + reward) / self._pull_counts
 
     def __str__(self):
         return f"BernoulliArm p={self.success_probability}"

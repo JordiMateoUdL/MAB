@@ -2,9 +2,12 @@
 from typing import List
 from mab.domain.bandit import Bandit
 from mab.domain.solver import Solver
+from mab.solvers.thomson_sampling import ThomsonSamplingSolver
+
 
 class SimulationResults:
     """Helper class to store the results of the simulation."""
+
     def __init__(self):
         self.rewards = []  # The rewards for each iteration
         self.actions = []  # The actions for each iteration
@@ -24,10 +27,17 @@ class Simulator:
         for solver in self.solvers:
             for _ in range(num_iterations):
                 selected_arm = solver.select_arm()
+                if selected_arm not in self.bandit.get_arms():
+                    raise ValueError(
+                        "Selected arm is not present in the bandit.")
                 reward = self.bandit.pull_arm(selected_arm)
                 solver.update_solver_history(selected_arm, reward)
                 self.results[solver].rewards.append(reward)
                 self.results[solver].actions.append(selected_arm)
+
+                # @TODO:Migrate to solver class
+                if isinstance(solver, ThomsonSamplingSolver):
+                    solver.update_state(selected_arm, reward)
 
             self.results[solver].usage_fractions = self.bandit.calculate_arm_fractions()
             self.bandit.reset()
@@ -35,5 +45,5 @@ class Simulator:
     def get_results(self, solver: Solver = None) -> List[float]:
         '''Returns the results for the specified solver.'''
         if solver:
-            return self.results[solver]
+            return self.results.get(solver)
         return self.results
