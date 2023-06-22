@@ -2,6 +2,8 @@
 
 MAB Simulator is a Python package that provides a framework for simulating and comparing multi-armed bandit algorithms.
 
+@WARNING: This is current work, so that I will update it frequently.
+
 * Notes:
     * [MultiArmed Bandit notes](docs/MAB.md)
 * Case Study:
@@ -13,7 +15,7 @@ You can install the MAB Simulator package using [Poetry](https://python-poetry.o
 
 ```bash
 # Clone the repository
-git clone https://github.com/JordiMateoUdl/mab.git
+git clone https://github.com/JordiMateoUdL/MAB.git
 
 # Navigate to the project directory
 cd mab-simulator
@@ -24,13 +26,13 @@ poetry install
 ## Usage
 To use the MAB Simulator package, you need to follow these steps:
 
-1. Create instances of the bandit arms that represents your problem.
+1. Create instances of the bandit arms that represent your problem.
 2. Create a Bandit object and pass the list of arms to it.
-3. Create instances of different solvers, such as EpsilonGreedySolver, UCB1Solver, or ThomsonSamplingSolver, and pass the Bandit object to them. Also, you can extend Solver class to compare other solver or strategies.
-4. Create a Simulator object and pass the Bandit object and the list of solvers to it.
+3. Create instances of different solvers, such as EpsilonGreedySolver, UCB1Solver, or ThomsonSamplingSolver, and pass the Bandit object to them. Also, you can extend the Solver class to compare other solvers or strategies.
+4. Create a Simulator object and pass the Bandit object and the solvers list to it.
 5. Run the simulation by calling the run_simulation() method of the Simulator object.
 Retrieve the results using the get_results() method of the 
-6.Simulator object.
+6. Simulator object.
 7. Analyze and visualize the results using the available plotting functions.
 
 See ```main.py```and ```case_study/slot_machine.py``` for a basic usage example.
