@@ -1,4 +1,4 @@
-"""Module for the Bernoulli Slot Machines case study."""
+"""Module for the Slot Machines case study."""
 from mab.case_study.bernoulli_arm import BernoulliArm
 from mab.domain.bandit import Bandit
 from mab.simulator.plotter import PlotConfig, Plotter
