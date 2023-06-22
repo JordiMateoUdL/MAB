@@ -13,6 +13,14 @@ class SimulationResults:
         self.actions = []  # The actions for each iteration
         self.usage_fractions = {}  # The fraction of times each arm was selected
 
+    def get_rewards(self) -> List[float]:
+        """Returns the rewards for each iteration."""
+        return self.rewards
+
+    def get_actions(self) -> List[float]:
+        """Returns the actions for each iteration."""
+        return self.actions
+
 
 class Simulator:
     '''Class representing a simulator for a multi-armed bandit problem.'''

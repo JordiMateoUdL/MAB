@@ -20,6 +20,19 @@ class PlotConfig:
         self.x_tick_label = x_tick_label
         self.title = title
 
+    def set_labels(self, x_label: str = "", y_label: str = ""):
+        """Sets the labels for the x and y axis."""
+        self.x_label = x_label
+        self.y_label = y_label
+
+    def set_thick_label(self, x_tick_label: str = ""):
+        """Sets the label for the x axis ticks."""
+        self.x_tick_label = x_tick_label
+
+    def set_title(self, title: str = ""):
+        """Sets the title of the plot."""
+        self.title = title
+
 
 class Plotter:
 

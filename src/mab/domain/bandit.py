@@ -130,7 +130,7 @@ class Bandit:
         cloned_bandit.set_arms([arm.__clone__() for arm in self._arms])
         return cloned_bandit
 
-    def calculate_arm_fractions(self) ->  Dict[Arm, float]:
+    def calculate_arm_fractions(self) -> Dict[Arm, float]:
         """
         Calculates the fraction of pulls for each arm in the bandit. 
         Returns: 
@@ -139,6 +139,6 @@ class Bandit:
         """
         arm_counts = {arm: arm.get_pull_counts() for arm in self.get_arms()}
         total_pulls = sum(arm_counts.values())
-        arm_fractions = {arm: count / total_pulls 
+        arm_fractions = {arm: count / total_pulls
                          if total_pulls > 0 else 0.0 for arm, count in arm_counts.items()}
         return arm_fractions

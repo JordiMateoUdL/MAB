@@ -1,6 +1,12 @@
 """ Main file for the project. """
+from mab.case_study.slot_machines import BernoulliSlotMachines
 
-from mab.case_study.slot_machines import bernoulli_slot_machines
 
 if __name__ == '__main__':
-    bernoulli_slot_machines()
+
+    print("#" * 80)
+    print("Bernoulli Slot Machines - Case Study")
+    slot_machines = BernoulliSlotMachines()
+    slot_machines.run_simulation(5000)
+    slot_machines.report_results()
+    print("#" * 80)

@@ -1,5 +1,4 @@
-""" Module for simulating slot machines case study """
-
+"""Module for the Bernoulli Slot Machines case study."""
 from mab.case_study.bernoulli_arm import BernoulliArm
 from mab.domain.bandit import Bandit
 from mab.simulator.plotter import PlotConfig, Plotter
@@ -8,80 +7,76 @@ from mab.solvers.epsilon_greedy import EpsilonGreedySolver
 from mab.solvers.thomson_sampling import ThomsonSamplingSolver
 from mab.solvers.ucb import UCB1Solver
 
+# @TODO: Add a parent abstract case study class
+class BernoulliSlotMachines():
+    """Bernoulli Slot Machines - Case Study"""
+    def __init__(self):
+        self.arms = [
+            BernoulliArm(0.0),
+            BernoulliArm(0.1),
+            BernoulliArm(0.2),
+            BernoulliArm(0.3),
+            BernoulliArm(0.4),
+            BernoulliArm(0.5),
+            BernoulliArm(0.6),
+            BernoulliArm(0.7),
+            BernoulliArm(0.8),
+            BernoulliArm(0.9)
+        ]
+        self.bandit = Bandit(self.arms)
 
-def bernoulli_slot_machines():
-    """Bernoulli slot machines case study."""
-    # Configuration of the Bernoulli bandit based on the slot machines case study
-    arms = [
-        BernoulliArm(0.0),
-        BernoulliArm(0.1),
-        BernoulliArm(0.2),
-        BernoulliArm(0.3),
-        BernoulliArm(0.4),
-        BernoulliArm(0.5),
-        BernoulliArm(0.6),
-        BernoulliArm(0.7),
-        BernoulliArm(0.8),
-        BernoulliArm(0.9)
-    ]
+        self.epsilon_greedy_solver = EpsilonGreedySolver(
+            self.bandit, epsilon=0.01)
+        self.ucb1_solver = UCB1Solver(self.bandit, exploration_parameter=1.0)
+        self.thomson_sampling_solver = ThomsonSamplingSolver(self.bandit)
+        self.solvers = [self.epsilon_greedy_solver,
+                        self.ucb1_solver, self.thomson_sampling_solver]
 
-    # Bandit definion for holding the Bernoulli arms
-    bandit = Bandit(arms)
+        self.simulator = Simulator(self.bandit, self.solvers)
 
-    # Solver configuration
-    epsilon_greedy_solver = EpsilonGreedySolver(bandit, epsilon=0.01)
-    ucb1_solver = UCB1Solver(bandit, exploration_parameter=1.0)
-    thomson_sampling_solver = ThomsonSamplingSolver(bandit)
-    solvers = [epsilon_greedy_solver, ucb1_solver, thomson_sampling_solver]
+    def run_simulation(self, iterations):
+        """run the simulation for the specified number of iterations."""
+        self.simulator.run(iterations)
 
-    # Create the simulator instance
-    simulator = Simulator(bandit, solvers)
+    def report_results(self):
+        """report the results of the simulation."""
+        solvers_names = [str(solver) for solver in self.solvers]
+        for solver in self.solvers:
+            print(f'Solver {solver}')
+            results = self.simulator.get_results(solver)
+            print(" +% Selection Fraction:")
+            for arm in self.bandit.get_arms():
+                print(
+                    f' ++ Arm {arm}: {results.usage_fractions[arm] * 100:.2f}%')
 
-    # Run the simulator for 1000 iterations
-    iterations = 5000
-    simulator.run(iterations)
+        benchmark_results = self.simulator.get_results()
 
-    # Report results
-    solvers_names = [str(solver) for solver in solvers]
-    for solver in solvers:
-        print(f'Solver {solver}')
-        results = simulator.get_results(solver)
-        print(" +% Selection Fraction:")
-        for arm in bandit.get_arms():
-            print(f' ++ Arm {arm}: {results.usage_fractions[arm] * 100:.2f}%')
+        arm_fractions = {}
+        rewards = {}
+        regrets = {}
+        for solver in self.solvers:
+            arm_fractions[str(
+                solver)] = benchmark_results[solver].usage_fractions.values()
+            rewards[str(solver)] = benchmark_results[solver].rewards
 
-    benchmark_results = simulator.get_results()
-    
+            # Calculate the cumulative regret
+            regret_history = []
+            for estimated_prob in rewards[str(solver)]:
+                true_prob = max(arm.success_probability for arm in self.arms)
+                regret_history.append(true_prob - estimated_prob)
 
-    # Obtain the fraction of times each arm was selected for each solver
-    # @TODO: Migrate to Reporter class
-    arm_fractions = {}
-    rewards = {}
-    regrets = {}
-    for solver in solvers:
-        arm_fractions[str(
-            solver)] = benchmark_results[solver].usage_fractions.values()
-        rewards[str(
-            solver)] = benchmark_results[solver].rewards
-        
-        # Calculate the cumulative regret
-        regret_history = []
-        for estimated_prob in rewards[str(solver)]:
-            true_prob = max([arm.success_probability for arm in arms])
-            regret_history.append(true_prob - estimated_prob)
+            regrets[str(solver)] = regret_history
 
-        regrets[str(solver)] = regret_history
-    
-    # Plot the results
-    # Plot the fraction of times each arm was selected for each solver
-    Plotter.plot_arm_selection_fractions(arm_fractions, solvers_names)
-    Plotter.show_plot()
-    
-    Plotter.plot_cumulative(rewards)
-    Plotter.show_plot()
-    
-    Plotter.plot_cumulative(regrets, PlotConfig(x_label="#Iterations", 
-                                                y_label="Cumulative Regret", 
-                                                title="Comparison of cumulative regret obtained by each solver"))
-    Plotter.show_plot()
+        # Plot the results
+        Plotter.plot_arm_selection_fractions(arm_fractions, solvers_names)
+        Plotter.show_plot()
 
+        Plotter.plot_cumulative(rewards)
+        Plotter.show_plot()
+
+        Plotter.plot_cumulative(
+            regrets,
+            PlotConfig(x_label="#Iterations",
+                       y_label="Cumulative Regret",
+                       title="Comparison of cumulative regret obtained by each solver"))
+        Plotter.show_plot()

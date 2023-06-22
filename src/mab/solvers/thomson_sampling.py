@@ -3,13 +3,15 @@
 from random import betavariate, choice
 from mab.domain.arm import Arm
 from mab.domain.bandit import Bandit
-from mab.domain.solver import Solver, SolverAction
+from mab.domain.solver import Solver
+
+# @TODO: Include the exploration/explotation parameter and SolverAction
 
 
 class ThomsonSamplingSolver(Solver):
     """Thomson Sampling Solver implementation for multi-armed bandit problems."""
 
-    def __init__(self, bandit: Bandit, 
+    def __init__(self, bandit: Bandit,
                  exploration_parameter: float = 0.0,
                  init_a: float = 1,
                  init_b: float = 1) -> None:
@@ -36,20 +38,19 @@ class ThomsonSamplingSolver(Solver):
             The selected arm.
 
         """
-        samples = [betavariate(self._alpha[i], self._beta[i]) 
+        samples = [betavariate(self._alpha[i], self._beta[i])
                    for i in range(self._bandit.get_arms_number())]
         max_sample = max(samples)
-        max_indices = [i for i, sample in enumerate(samples) if sample == max_sample]
+        max_indices = [i for i, sample in enumerate(
+            samples) if sample == max_sample]
         selected_arm_index = choice(max_indices)
         return self._bandit.get_arm(selected_arm_index)
-    
+
     def update_state(self, arm: Arm, reward: float) -> None:
         """Updates the state of the solver based on the reward obtained from pulling the arm."""
         arm_index = self._bandit.get_arm_index(arm)
         self._alpha[arm_index] += reward
         self._beta[arm_index] += (1 - reward)
-
-        
 
     def __str__(self):
         """Returns the name of the solver."""
