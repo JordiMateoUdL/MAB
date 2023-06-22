@@ -2,7 +2,7 @@
 
 from mab.case_study.bernoulli_arm import BernoulliArm
 from mab.domain.bandit import Bandit
-from mab.simulator.plotter import Plotter
+from mab.simulator.plotter import PlotConfig, Plotter
 from mab.simulator.simulator import Simulator
 from mab.solvers.epsilon_greedy import EpsilonGreedySolver
 from mab.solvers.ucb import UCB1Solver
@@ -36,7 +36,7 @@ def bernoulli_slot_machines():
     simulator = Simulator(bandit, solvers)
 
     # Run the simulator for 1000 iterations
-    iterations = 10000
+    iterations = 5000
     simulator.run(iterations)
 
     # Report results
@@ -55,11 +55,20 @@ def bernoulli_slot_machines():
     # @TODO: Migrate to Reporter class
     arm_fractions = {}
     rewards = {}
+    regrets = {}
     for solver in solvers:
         arm_fractions[str(
             solver)] = benchmark_results[solver].usage_fractions.values()
         rewards[str(
             solver)] = benchmark_results[solver].rewards
+        
+        # Calculate the cumulative regret
+        regret_history = []
+        for estimated_prob in rewards[str(solver)]:
+            true_prob = max([arm.success_probability for arm in arms])
+            regret_history.append(true_prob - estimated_prob)
+
+        regrets[str(solver)] = regret_history
     
     # Plot the results
     # Plot the fraction of times each arm was selected for each solver
@@ -67,5 +76,10 @@ def bernoulli_slot_machines():
     Plotter.show_plot()
     
     Plotter.plot_cumulative(rewards)
+    Plotter.show_plot()
+    
+    Plotter.plot_cumulative(regrets, PlotConfig(x_label="#Iterations", 
+                                                y_label="Cumulative Regret", 
+                                                title="Comparison of cumulative regret obtained by each solver"))
     Plotter.show_plot()
 

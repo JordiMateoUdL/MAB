@@ -25,8 +25,9 @@ class BernoulliArm(Arm):
     def update_cumulative_reward(self, reward: int | float) -> None:
         """ We update the cumulative reward of the arm based on the pull count 
         and the reward obtained from pulling the arm."""
-        self._cumulative_reward = (self._cumulative_reward * (self._pull_counts - 1)
-                                   + reward) / self._pull_counts
+        #self._cumulative_reward = (self._cumulative_reward * (self._pull_counts - 1)
+        #                           + reward) / self._pull_counts
+        self._cumulative_reward += 1/(self._pull_counts+1) * (reward - self._cumulative_reward)
 
     def __str__(self):
         return f"BernoulliArm p={self.success_probability}"
