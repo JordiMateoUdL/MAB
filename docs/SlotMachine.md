@@ -61,7 +61,7 @@ The success probabilities of the 10 arms are as follows:
 | Thomson Sampling(c=0.0)      | 0.03%                 | 0.04%                 | 0.03%                 | 0.04%                 | 0.13%                 | 0.04%                 | 0.17%                 | 0.32%                 | 0.59%                 | 98.61%                |
 
 
-![](./docs/bernoulli_slot_machine_case_study/fig1.png)
-![](./docs/bernoulli_slot_machine_case_study/fig2.png)
-![](./docs/bernoulli_slot_machine_case_study/fig3.png)
-![](./docs/bernoulli_slot_machine_case_study/fig4.png)
+![](./results/bernoulli_slot_machine_case_study/fig1.png)
+![](./results/bernoulli_slot_machine_case_study/fig2.png)
+![](./results/bernoulli_slot_machine_case_study/fig3.png)
+![](./results/bernoulli_slot_machine_case_study/fig4.png)
