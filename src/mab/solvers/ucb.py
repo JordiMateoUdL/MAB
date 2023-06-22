@@ -34,7 +34,7 @@ class UCB1Solver(Solver):
             The selected arm.
         """
         arms = self._bandit.get_arms()
-        total_pulls = sum(arm.get_pulls() for arm in arms)
+        total_pulls = sum(arm.get_pull_counts() for arm in arms)
 
         if total_pulls == 0:
             return arms[0]  # Select the first arm if no pulls have been made
@@ -42,7 +42,7 @@ class UCB1Solver(Solver):
         ucb_values = []
         for arm in arms:
             exploration_term = sqrt(
-                (2 * log(total_pulls)) / max(1, arm.get_pulls()))
+                (2 * log(total_pulls)) / max(1, arm.get_pull_counts()))
             exploration_bonus = exploration_term * self.exploration_parameter
             ucb_value = arm.get_cumulative_reward() + exploration_bonus
             ucb_values.append(ucb_value)
@@ -56,3 +56,7 @@ class UCB1Solver(Solver):
             self.update_solver_history(selected_arm, SolverAction.EXPLOIT)
 
         return selected_arm
+
+    def __str__(self):
+        """Returns the name of the solver."""
+        return f'UCB1(c={self.exploration_parameter})'

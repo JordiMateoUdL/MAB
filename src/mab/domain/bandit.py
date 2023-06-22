@@ -2,7 +2,7 @@
 Module: bandit.py
 Base class representing a multi-armed bandit problem.
 '''
-from typing import List
+from typing import Dict, List
 from mab.domain.arm import Arm
 
 
@@ -129,3 +129,23 @@ class Bandit:
         cloned_bandit = self.__class__()
         cloned_bandit.set_arms([arm.__clone__() for arm in self._arms])
         return cloned_bandit
+
+    def calculate_arm_fractions(self) -> Dict:
+        """
+        Calculates the fraction of pulls for each arm in the bandit. 
+        Returns: 
+            A dictionary with the fraction of pulls 
+            for each arm in the bandit. {arm: fraction, ...}
+        """
+        arm_counts = {}
+        for arm in self.get_arms():
+            arm_counts[arm] = arm.get_pull_counts()
+
+        total_pulls = sum(arm_counts.values())
+
+        arm_fractions = {}
+        for arm, count in arm_counts.items():
+            fraction = count / total_pulls if total_pulls > 0 else 0.0
+            arm_fractions[arm] = fraction
+
+        return arm_fractions
