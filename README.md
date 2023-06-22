@@ -77,7 +77,7 @@ $$a_{t}^{UCB} = argmax_{a \in A} \hat{R}(a_t) + \hat{U}(a_t)$$
 
 To estimate the $\hat{U}(a_t)$ a traditional method is **UCB1 Heuristic** :
 
-$$UCB1(a_t) = \hat{R}(a_t) + c \sqrt{\frac{log(t)}{N(a_t)}}$$
+$$UCB1(a_t) = \hat{R}(a_t) + c \sqrt{\frac{2*log(t)}{N(a_t)}}$$
 
 where:
 * $\hat{R}(a_t)$ is the estimated reward of arm $a_t$,
@@ -98,7 +98,7 @@ Initialize $R(a) \leftarrow 0$ for all arms $a \in A$\;
 
 \While{$t < T$}{
     Increment $t \leftarrow t + 1$\;
-    Compute the upper confidence bounds: $UCB1(a) \leftarrow R(a) + c \sqrt{\frac{\log(t)}{N(a) + \epsilon}}$ for all arms $a \in A$\;
+    Compute the upper confidence bounds: $UCB1(a) \leftarrow R(a) + c \sqrt{\frac{2\log(t)}{N(a) + \epsilon}}$ for all arms $a \in A$\;
     Select the arm with the highest upper confidence bound: $a_t \leftarrow \arg\max_{a \in A} UCB1(a)$\;
     Pull arm $a_t$ and observe the reward $r_t$\;
     Increment the count of arm $a_t$: $N(a_t) \leftarrow N(a_t) + 1$\;
