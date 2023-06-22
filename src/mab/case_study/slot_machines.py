@@ -8,8 +8,11 @@ from mab.solvers.thomson_sampling import ThomsonSamplingSolver
 from mab.solvers.ucb import UCB1Solver
 
 # @TODO: Add a parent abstract case study class
+
+
 class BernoulliSlotMachines():
     """Bernoulli Slot Machines - Case Study"""
+
     def __init__(self):
         self.arms = [
             BernoulliArm(0.0),
@@ -54,10 +57,13 @@ class BernoulliSlotMachines():
         arm_fractions = {}
         rewards = {}
         regrets = {}
+        arm_cummulative = {}
         for solver in self.solvers:
             arm_fractions[str(
                 solver)] = benchmark_results[solver].usage_fractions.values()
             rewards[str(solver)] = benchmark_results[solver].rewards
+
+            arm_cummulative[str(solver)] = benchmark_results[solver].cummulatives
 
             # Calculate the cumulative regret
             regret_history = []
@@ -79,4 +85,11 @@ class BernoulliSlotMachines():
             PlotConfig(x_label="#Iterations",
                        y_label="Cumulative Regret",
                        title="Comparison of cumulative regret obtained by each solver"))
+        Plotter.show_plot()
+
+        Plotter.plot_estimated_probabilities_sorted(
+            solvers_names=solvers_names,
+            bandit=self.bandit,
+            cummulatives = arm_cummulative
+            )
         Plotter.show_plot()

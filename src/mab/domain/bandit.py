@@ -142,3 +142,11 @@ class Bandit:
         arm_fractions = {arm: count / total_pulls
                          if total_pulls > 0 else 0.0 for arm, count in arm_counts.items()}
         return arm_fractions
+
+    def get_cumulative_by_arms(self) -> List:
+        """
+        Returns the cumulative reward by arm.
+        Returns:
+            A list of cumulative rewards by arm.
+        """
+        return [arm.get_cumulative_reward() for arm in self.get_arms()]

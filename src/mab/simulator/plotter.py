@@ -4,6 +4,7 @@ from typing import Dict, List
 import matplotlib.pyplot as plt
 import numpy as np
 
+from mab.domain.bandit import Bandit
 
 class PlotConfig:
     """Helper class to store the plot configuration."""
@@ -115,6 +116,56 @@ class Plotter:
         axes.set_title(config.title)
         axes.set_xticks(index)
         axes.set_xticklabels([f"{config.x_tick_label} {i+1}" for i in index])
+        axes.legend()
+
+        return fig
+
+    @staticmethod
+    def plot_estimated_probabilities_sorted(
+            solvers_names: List[str], bandit: Bandit,
+            cummulatives: Dict[str, List[float]],
+            config: PlotConfig = PlotConfig(
+                x_label='Arms sorted by ' + r'$\theta$',
+                y_label='Estimated ' + r'$\theta$',
+                title='Comparative of the estimated versus true probabilities of each arm')
+    ) -> plt.Figure:
+        """
+        Plot a graph with the estimated probabilities of each arm sorted 
+        by the success probability.
+        Args:
+            solvers_names (List[str]): A list containing the names of the solvers.
+            bandit (Bandit): The bandit used in the simulation.
+            config (PlotConfig): An object containing the plot configuration.
+            cummulatives (Dict): A dictionary containing the cumulative rewards for each arm.
+        Returns:
+            A matplotlib figure with the plot.
+        """
+
+        sorted_indices = sorted(range(bandit.get_arms_number(
+        )), key=lambda x: bandit.get_arm(x).success_probability)
+
+        # Plot creation
+        fig, axes = plt.subplots()
+
+        true_probabilities = [bandit.get_arm(
+            arm).success_probability for arm in sorted_indices]
+
+        for solver in solvers_names:
+            cumulative_rewards = cummulatives[solver]
+            estimated_probabilities = [cumulative_rewards[i]
+                                       for i in sorted_indices]
+            plt.plot(range(bandit.get_arms_number()),
+                     estimated_probabilities, 'x', markeredgewidth=2, label=solver,)
+
+        plt.plot(range(bandit.get_arms_number()),
+                 true_probabilities, 'k--', markersize=12)
+
+        plt.grid('k', ls='--', alpha=0.3)
+
+        # Axes and Legend configuration
+        axes.set_xlabel(config.x_label)
+        axes.set_ylabel(config.y_label)
+        axes.set_title(config.title)
         axes.legend()
 
         return fig

@@ -12,6 +12,7 @@ class SimulationResults:
         self.rewards = []  # The rewards for each iteration
         self.actions = []  # The actions for each iteration
         self.usage_fractions = {}  # The fraction of times each arm was selected
+        self.cummulatives = []  # The cumulative rewards for each arm
 
     def get_rewards(self) -> List[float]:
         """Returns the rewards for each iteration."""
@@ -47,6 +48,7 @@ class Simulator:
                 if isinstance(solver, ThomsonSamplingSolver):
                     solver.update_state(selected_arm, reward)
 
+            self.results[solver].cummulatives = self.bandit.get_cumulative_by_arms()
             self.results[solver].usage_fractions = self.bandit.calculate_arm_fractions()
             self.bandit.reset()
 
