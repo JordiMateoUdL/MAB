@@ -45,7 +45,7 @@ Considerations:
 
 ## Epsilon-greedy algorithm
 
-![](./docs/figures/epsilon-greedy.png)
+![](figures/epsilon-greedy.png)
 
 ```tex
 \begin{algorithm}[H]
@@ -90,7 +90,7 @@ where:
 * $t$ is the current time step, and
 * $c$ is a constant that controls the trade-off between exploration and exploitation. Higher values of $c$ encourage more exploration.
 
-![](./docs/figures/ucb1.png)
+![](figures/ucb1.png)
 
 ```tex
 \begin{algorithm}[H]
@@ -114,7 +114,7 @@ Initialize $R(a) \leftarrow 0$ for all arms $a \in A$\;
 
 ## Thomson Sampling
 
-![](./docs/figures/thomoson_sampling.png)
+![](figures/thomoson_sampling.png)
 
 ```tex
 \begin{algorithm}[H]
