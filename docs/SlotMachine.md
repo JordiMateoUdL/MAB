@@ -10,7 +10,7 @@ Each slot machine, also known as an arm, in our case study is modeled as a **Ber
 
 To simulate the Bernoulli slot machines in our implementation, we have created a class called ```BernoulliArm```. This class provides two main functions: ```pull()``` and ```update_cumulative()```, which are responsible for pulling the arm and updating the cumulative reward, respectively.
 
-### ```pull()````
+### ```pull()```
 
 $$\begin{equation*}
   R(a_t) =
