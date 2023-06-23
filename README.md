@@ -30,10 +30,7 @@ To use the MAB Simulator package, you need to follow these steps:
 2. Create a Bandit object and pass the list of arms to it.
 3. Create instances of different solvers, such as EpsilonGreedySolver, UCB1Solver, or ThomsonSamplingSolver, and pass the Bandit object to them. Also, you can extend the Solver class to compare other solvers or strategies.
 4. Create a Simulator object and pass the Bandit object and the solvers list to it.
-5. Run the simulation by calling the run_simulation() method of the Simulator object.
-Retrieve the results using the get_results() method of the 
-6. Simulator object.
-7. Analyze and visualize the results using the available plotting functions.
+5. Analyze and visualize the results using the available plotting functions.
 
 See ```main.py```and ```case_study/slot_machine.py``` for a basic usage example.
 
