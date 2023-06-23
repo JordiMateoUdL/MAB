@@ -51,10 +51,6 @@ We welcome contributions to the MAB Simulator package! If you would like to cont
 
 Once your PR is submitted, it will be reviewed by the project maintainers. They may provide feedback or request further changes. Once the changes are approved, your code will be merged into the `main` branch.
 
-### Code Style
-
-Please adhere to the project's coding conventions and standards when making contributions. Ensure that your code follows consistent indentation, variable naming, and commenting practices. If possible, run code formatters or linters to automatically enforce these standards.
-
 
 
 
